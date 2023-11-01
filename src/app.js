@@ -9,14 +9,8 @@ app.use(morgan("dev"));
 
 // init database
 require('./dbs/init.mongodb.js')
-const { checkOverload } = require('./helpers/check.connect.js')
-checkOverload()
 
 // init routes
-app.get('/', (req, res) => {
-    return res.status(200).json({
-        message: "Hello world!"
-    })
-})
+app.use(require('./routes/index.js'))
 
 module.exports = app

@@ -9,7 +9,7 @@ class Database {
     connect = () => {
         mongoose.connect(`mongodb://${DB_HOST}:${DB_PORT}/${APP_NAME}`)
             .then(() => console.log(`Connecting to: mongodb://${DB_HOST}:${DB_PORT}/${APP_NAME}`))
-            .catch(err => console.err(err))
+            .catch(err => console.log(err))
     }
 
     static getInstance = () => {

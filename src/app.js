@@ -9,8 +9,8 @@ app.use(morgan("dev"));
 
 // init database
 require('./dbs/init.mongodb.js')
-const { countConnections } = require('./helpers/check.connect.js')
-countConnections()
+const { checkOverload } = require('./helpers/check.connect.js')
+checkOverload()
 
 // init routes
 app.get('/', (req, res) => {

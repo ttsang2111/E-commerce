@@ -1,27 +1,19 @@
 require('dotenv').config()
 
-const dev = {
-    app: {
-        port: process.env.DEV_APP_PORT || 3001
+const config = {
+    'DEV': {
+        'APP_PORT': process.env.DEV_APP_PORT || 3000,
+        'DB_HOST': process.env.DEV_DB_HOST || 'localhost',
+        'DB_PORT': process.env.DEV_DB_PORT || 27017,
+        'APP_NAME': process.env.DEV_APP_NAME || 'eCommerce'
     },
-    db: {
-        host: process.env.DEV_DB_HOST || 'localhost',
-        port: process.env.DEV_DB_PORT || 27017,
-        name: process.env.DEV_DB_NAME || 'eCommerceDEV'
-    } 
+    'PRODUCT': {
+        'APP_PORT': process.env.PRODUCT_APP_PORT || 3000,
+        'DB_HOST': process.env.PRODUCT_DB_HOST || 'localhost',
+        'DB_PORT': process.env.PRODUCT_DB_PORT || 27017,
+        'APP_NAME': process.env.DEV_APP_NAME || 'eCommerce'
+    },
+
 }
 
-const pro = {
-    app: {
-        port: process.env.PRO_APP_PORT || 3000
-    },
-    db: {
-        host: process.env.PRO_DB_HOST || 'localhost',
-        port: process.env.PRO_DB_PORT || 27017,
-        name: process.env.PRO_DB_NAME || 'eCommercePRO'
-    } 
-}
-
-const config = {dev, pro}
-const env = process.env.NODE_ENV || 'dev'
-module.exports = config[env]
+module.exports = config.DEV

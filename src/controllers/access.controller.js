@@ -3,8 +3,9 @@
 const AccessService = require('../services/access.service.js')
 
 class AccessController {
-    static signup = (req, res, next) => {
-        return res.status(201).json(AccessService.signup())
+    static signUp = async (req, res, next) => {
+        const { name, email, password } = req.body
+        return res.json(await AccessService.signUp({name, email, password}))
     }
 }
 

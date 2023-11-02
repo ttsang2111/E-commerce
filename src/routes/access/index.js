@@ -2,6 +2,6 @@ const express = require('express')
 const router = express.Router()
 const AccessController = require('../../controllers/access.controller.js')
 
-router.get('/shop/signup', AccessController.signup)
+router.post('/shop/signup', AccessController.signUp)
 
 module.exports = router

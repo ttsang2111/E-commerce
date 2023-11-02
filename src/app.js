@@ -5,18 +5,14 @@ const app = express();
 
 // init middlewares
 app.use(helmet())
-app.use(morgan("dev"));
+app.use(morgan("dev"))
+app.use(express.json())
+app.use(express.urlencoded({ extended: true}))
 
 // init database
 require('./dbs/init.mongodb.js')
-const { countConnections } = require('./helpers/check.connect.js')
-countConnections()
 
 // init routes
-app.get('/', (req, res) => {
-    return res.status(200).json({
-        message: "Hello world!"
-    })
-})
+app.use(require('./routes/index.js'))
 
 module.exports = app

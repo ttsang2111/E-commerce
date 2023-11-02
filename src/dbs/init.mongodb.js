@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const { DB_HOST, DB_PORT, APP_NAME } = require('../configs/index.js')
+const { db: {host, port, name} } = require('../configs/index.js')
 
 class Database {
     constructor() {
@@ -7,8 +7,8 @@ class Database {
     }
 
     connect = () => {
-        mongoose.connect(`mongodb://${DB_HOST}:${DB_PORT}/${APP_NAME}`)
-            .then(() => console.log(`Connecting to: mongodb://${DB_HOST}:${DB_PORT}/${APP_NAME}`))
+        mongoose.connect(`mongodb://${host}:${port}/${name}`)
+            .then(() => console.log(`Connecting to: mongodb://${host}:${port}/${name}`))
             .catch(err => console.log(err))
     }
 

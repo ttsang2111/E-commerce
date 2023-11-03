@@ -6,6 +6,7 @@ const shopModel = require('../models/shop.model.js')
 const { RoleShop } = require('../constants/index.js')
 const KeyTokenService = require('./keyToken.service.js')
 const { createPairTokens } = require('../auth/authUltils.js')
+const { BadRequestError } = require('../core/error.response.js')
 const { getIntoData } = require('../utils/index.js')
 class AccessService {
     static signUp = async ({ name, email, password }) => {
@@ -13,10 +14,7 @@ class AccessService {
             // step1: check existance of email
             const shopHolder = await shopModel.findOne({ email }).lean()
             if(shopHolder) {
-                return {
-                    code: 'xyz',
-                    message: 'Shop is already registered'
-                }
+                throw new BadRequestError('Shop already existed')
             }
 
             const passwordHash = await bcrypt.hash(password, 10)
@@ -38,7 +36,7 @@ class AccessService {
                         format: 'pem'
                     }
                 })
-                console.log( { privateKey, publicKey }) 
+                console.log( { privateKey, publicKey } ) 
 
                 // store keys to db
                 const publicKeyString = await KeyTokenService.createKeyToken( {
@@ -47,10 +45,7 @@ class AccessService {
                 })
 
                 if(!publicKeyString) {
-                    return {
-                        code: 'xyz',
-                        meesage: 'publicKeyString error'
-                    }
+                    throw new BadRequestError('publicKeyString is not found')
                 }
                 
                 // create pair tokens
@@ -71,9 +66,9 @@ class AccessService {
             }
         } catch (error) {
             return {
-                code: 'xyz',
+                code: 'xyz', // xyz should point to signUp function
                 message: error.message,
-                status: 'error'
+                status: error.status
             }
         }
     }

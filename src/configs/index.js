@@ -2,7 +2,7 @@ require('dotenv').config()
 
 const dev = {
     app: {
-        port: process.env.DEV_APP_PORT || 3001
+        port: process.env.DEV_APP_PORT || 3050
     },
     db: {
         host: process.env.DEV_DB_HOST || 'localhost',

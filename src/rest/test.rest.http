@@ -1,11 +1,21 @@
 @url_dev=http://localhost:3050/v1/api
 
+### test invalid url
+GET {{url_dev}}/testxxx
+x-api-key: c563588d97e34191aeba1bcf91584bca234ad5a931637a28dcbc3674521f1e40
+
+### test middleware
+GET {{url_dev}}/test
+x-api-key: c563588d97e34191aeba1bcf91584bca234ad5a931637a28dcbc3674521f1e40
+
+
 ### sign up
 POST {{url_dev}}/shop/signup
 Content-Type: application/json
+x-api-key: c563588d97e34191aeba1bcf91584bca234ad5a931637a28dcbc3674521f1e40
 
-{
-    "name": "shop03",
-    "email": "shop03@gmail.com",
+{   
+    "name": "shop04",
+    "email": "shop04@gmail.com",
     "password": "shop"
 }

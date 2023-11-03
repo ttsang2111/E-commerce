@@ -22,7 +22,6 @@ class BadRequestError extends ErrorResponse {
     constructor(message=reasonStatusCode.CONFLICT, status=statusCode.CONFLICT) {
         super(message, status)
     }
-
 }
 
 class ForbiddenError extends ErrorResponse {
@@ -30,6 +29,8 @@ class ForbiddenError extends ErrorResponse {
         super(message, status)
     }
 }
+
+// AuthenticationError
 
 module.exports = {
     BadRequestError,

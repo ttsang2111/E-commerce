@@ -1,7 +1,7 @@
 const { Schema, model } = require('mongoose');
 
-const DOCUMENT_NAME = 'Key'
-const COLLECTION_NAME = 'Keys'
+const DOCUMENT_NAME = 'TokenKey'
+const COLLECTION_NAME = 'TokenKeys'
 
 var keyTokenSchema = new Schema({
     userId: {
@@ -13,7 +13,15 @@ var keyTokenSchema = new Schema({
         type: String,
         required: true
     },
+    privateKey: {
+        type: String,
+        required: true
+    },
     refreshToken: {
+        type: String,
+        required: true
+    },
+    refreshTokenUsed: {
         type: Array,
         default: []
     }

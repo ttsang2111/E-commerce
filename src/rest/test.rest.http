@@ -20,3 +20,13 @@ x-api-key: {{api_key}}
     "email": "shop@gmail.com",
     "password": "shop"
 }
+
+### login
+POST {{url_dev}}/shop/login
+Content-Type: application/json
+x-api-key: {{api_key}}
+
+{   
+    "email": "shop@gmail.com",
+    "password": "shop"
+}

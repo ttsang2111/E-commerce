@@ -1,7 +1,8 @@
 'use strict'
+
 const JWT = require('jsonwebtoken')
 
-const createPairTokens = async (payload, publicKey, privateKey) => {
+const createTokenPair = async (payload, publicKey, privateKey) => {
     try {
         const accessToken = await JWT.sign(payload, privateKey, {
             algorithm: 'RS256',
@@ -51,7 +52,11 @@ const createToken = async (payload, key) => {
     }
 }
 
+const verifyJWT = async (token, keySecret) => {
+    return JWT.verify(token, keySecret)
+}
 module.exports = {
     createToken,
-    createPairTokens
+    createPairTokens: createTokenPair,
+    verifyJWT
 }

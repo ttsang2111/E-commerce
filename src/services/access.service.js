@@ -2,34 +2,100 @@
 
 const bcrypt = require('bcrypt')
 const crypto = require('crypto')
-const shopModel = require('../models/shop.model.js')
 const { RoleShop } = require('../constants/index.js')
-const KeyTokenService = require('./keyToken.service.js')
-const { createPairTokens } = require('../auth/authUltils.js')
-const { BadRequestError } = require('../core/error.response.js')
-const { getIntoData } = require('../utils/index.js')
+const { verifyJWT } = require('../auth/utils.auth.js')
+const shopModel = require('../models/shop.model.js')
+const KeyTokenService = require('./tokenKey.service.js')
 const { findByEmail } = require('./shop.service.js')
+const { removeTokenKeyById } = require('./tokenKey.service.js')
+const { createPairTokens } = require('../auth/utils.auth.js')
+const { getIntoData } = require('../utils/index.js')
+const { BadRequestError, ForbiddenError, AuthFailureError } = require('../core/error.response.js')
 
 class AccessService {
+    
+    static handleRefreshTokenV2 = async ({ refreshToken, user, keyStore }) => {
+        const { userId, email } = user
 
+        if (!keyStore) throw new AuthFailureError('1-Shop not registered')
+
+        const foundShop = await findByEmail({email})
+        if (!foundShop) throw new AuthFailureError('2-Shop not registered')
+
+        const tokens = await createPairTokens({ userId, email }, keyStore.publicKey, keyStore.privateKey)
+
+        await keyStore.updateOne({
+            $set: {
+                refreshToken: tokens.refreshToken
+            },
+            $addToSet: {
+                refreshTokenUsed: refreshToken
+            }
+        })
+        return {
+            user: { userId, email },
+            tokens
+        }
+    } 
+
+    static handleRefreshToken = async ({ refreshToken }) => {
+        const foundToken = await KeyTokenService.findRefreshTokenUsed(refreshToken)
+        if (foundToken) {
+            // decode to figure out user
+            const { userId, email } = verifyJWT(refreshToken, foundToken.publicKey)
+            console.log({ userId, email })
+            if (!userId) throw new BadRequestError(`Invalid authentication`)
+            await KeyTokenService.deleteKeysByUserId(userId)
+            throw new ForbiddenError('Something wrong happened !! Please relogin')
+        }
+        const holderToken = await KeyTokenService.findByRefreshToken(refreshToken)
+        if (!holderToken) throw new AuthFailureError('1-Shop not registered')
+
+        const {userId, email} = await verifyJWT(refreshToken, holderToken.publicKey)
+        console.log('2--', { userId, email })
+
+        const foundShop = await findByEmail({email})
+        if (!foundShop) throw new AuthFailureError('2-Shop not registered')
+
+        const tokens = await createPairTokens({ userId, email }, holderToken.publicKey, holderToken.privateKey)
+
+        await holderToken.updateOne({
+            $set: {
+                refreshToken: tokens.refreshToken
+            },
+            $addToSet: {
+                refreshTokenUsed: refreshToken
+            }
+        })
+        return {
+            user: { userId, email},
+            tokens
+        }
+    } 
+ 
+    static logout = async ({ keyStore }) => {
+        const delKey = await removeTokenKeyById(keyStore._id)
+        return delKey
+    }
     /*
     1- find account in db by email
     2- match password
-    3- generate tokens
-    4- create AT and RT and save
-    5- return data
+    3- find keyStore by id
+    3.1- generate tokens
+    3.2- create AT and RT and save
+    4- return data
     */
     static login = async ({ email, password, refreshToken = null }) => {
         try {
-            //1.
+            //1
             const foundShop = await findByEmail({ email })
             if (!foundShop) throw BadRequestError('Login failed')
-            //2.
+            //2
             const match = bcrypt.compare(password, foundShop.password)
             if (!match) {
                 throw BadRequestError('Login failed')
             }
-            //3.
+            //3
             const { privateKey, publicKey } = crypto.generateKeyPairSync('rsa', {
                 modulusLength: 4096,
                 publicKeyEncoding: {
@@ -43,14 +109,16 @@ class AccessService {
             })
             const { _id: userId } = foundShop
             const tokens = await createPairTokens({ userId, email }, publicKey, privateKey)
-            //4.
+            //4
             await KeyTokenService.createKeyToken({
                 userId,
                 publicKey,
                 privateKey,
-                refreshToken: tokens.refreshToken
+                refreshToken: tokens.refreshToken,
+                accessToken: tokens.accessToken
             })
-            //5.
+
+            //5
             return {
                 shop: getIntoData({ object: foundShop, field: ["name", "email"] }),
                 tokens
@@ -94,14 +162,14 @@ class AccessService {
 
                 // create pair tokens
                 const tokens = await createPairTokens({ userId: newShop._id, email }, publicKey, privateKey)
-                console.log(`Created token successfully`, tokens)
 
                 // store keys to db
                 const publicKeyString = await KeyTokenService.createKeyToken({
                     userId: newShop._id,
                     publicKey,
                     privateKey,
-                    refreshToken: tokens.refreshToken
+                    refreshToken: tokens.refreshToken,
+                    accessToken: tokens.accessToken
                 })
                 if (!publicKeyString) {
                     throw new BadRequestError('publicKeyString is not found')

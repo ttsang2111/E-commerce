@@ -4,9 +4,15 @@ const { authentication, authenticationV2 } = require('../../auth/middlewares.aut
 const ProductController = require('../../controllers/product.controller.js')
 const { asyncHandler } = require('../../helpers/index.js')
 
+
 // authentication
 router.use(authenticationV2)
 
 router.post('', asyncHandler(ProductController.createProduct))
+router.get('/drafts/all', asyncHandler(ProductController.getAllDraftForShop))
+router.get('/published/all', asyncHandler(ProductController.getAllPublishedForShop))
+router.get('/unpublished/all', asyncHandler(ProductController.getAllUnpublishedForShop))
+router.post('/publish/:id', asyncHandler(ProductController.publishProductByShop))
+router.post('/unpublish/:id', asyncHandler(ProductController.unpublishProductByShop))
 
 module.exports = router

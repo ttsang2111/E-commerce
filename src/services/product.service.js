@@ -1,7 +1,8 @@
 'use strict'
 
-const { BadRequestError } = require('../core/error.response')
+const { BadRequestError, NotFoundError } = require('../core/error.response')
 const { product, clothing, electronic } = require('../models/product.model')
+const { findAllDraftsForShop,findAllPublishedForShop, publishProductByShop, unpublishProductByShop } = require('../models/repositories/product.repo')
 
 // defind Factory class to create product
 class ProductFactory {
@@ -16,6 +17,35 @@ class ProductFactory {
         if (!productClass) throw new BadRequestError(`Invalid product type: ${type}`)
         return await new productClass(payload).createProduct()
     }
+
+    static findAllDraftsForShop = async ({ product_shop, limit=null, skip=0 }) => {
+        const query = { product_shop, isDraft: true }
+        return await findAllDraftsForShop({ query, limit, skip })
+    }
+
+    static findAllPublishedForShop = async ({ product_shop, limit=null, skip=0 }) => {
+        const query = { product_shop, isPublished: true }
+        return await findAllPublishedForShop({ query, limit, skip })
+    }
+
+    static findAllUnpublishedForShop = async ({ product_shop, limit=null, skip=0 }) => {
+        const query = { product_shop, isPublished: false }
+        return await findAllPublishedForShop({ query, limit, skip })
+    }
+
+    static publishProductByShop = async ( { product_shop, product_id } ) => {
+        const foundProduct = await publishProductByShop({ product_shop, product_id })
+        if (!foundProduct) throw new NotFoundError('Not found product for publishing')
+        return foundProduct 
+    }
+    
+
+    static unpublishProductByShop = async ( { product_shop, product_id } ) => {
+        const foundProduct = await unpublishProductByShop({ product_shop, product_id })
+        if (!foundProduct) throw new NotFoundError('Not found product for unpublishing')
+        return foundProduct 
+    }
+
 }
 
 class Product {
@@ -78,5 +108,5 @@ ProductFactory.registerProductType('Clothing', Clothing)
 ProductFactory.registerProductType('Electronic', Electronic)
 
 module.exports = {
-    ProductFactory
+    ProductService: ProductFactory
 }

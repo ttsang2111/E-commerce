@@ -30,6 +30,8 @@ const productSchema = new Schema({
     timestamp: true
 })
 
+productSchema.index({ product_name: 'text', product_description: 'text' })
+
 productSchema.pre('save', function (next) {
     this.product_slug = slugify(this.product_name, { lower: true })
     next()

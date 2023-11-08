@@ -12,8 +12,8 @@ Content-Type: application/json
 x-api-key: {{api_key}}
 
 {   
-    "name": "shop",
-    "email": "shop@gmail.com",
+    "name": "shop1",
+    "email": "shop1@gmail.com",
     "password": "shop"
 }
 
@@ -23,8 +23,8 @@ Content-Type: application/json
 x-api-key: {{api_key}}
 
 {   
-    "email": "shop@gmail.com",
-    "password": "shop"
+    "email": "shop1@gmail.com",
+    "password": "shop1"
 }
 
 ### logout
@@ -73,6 +73,3 @@ Content-Type: application/json
 x-api-key: {{api_key}}
 x-client-id: 6549cae99382ca3a5cdb6873
 x-rtoken-id: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTQ5Y2FlOTkzODJjYTNhNWNkYjY4NzMiLCJlbWFpbCI6InNob3BAZ21haWwuY29tIiwiaWF0IjoxNjk5MzM0ODg5LCJleHAiOjE2OTk5Mzk2ODl9.CLL_dMkEpAa4oroJTT3BaAxlA_G7ICD9bVVLpeX1uhFegtQ37AfmKBe3EVyIE8owkqYziA05R3VySow2nc-Rf3BHqYDt3oDg6G1NPE2uqQg_9lC4dBp3icEtGhVgqstwa6SmyF500eduoF0TCHjVODyuJz29Ob48W0qLwteUsLRyRD1_A3BbZglqXZo6mIA-FeGcPK3wEc-Rp2vQR2U3d0qjy3h5HXFQgJpq9_GnmG4ScdNhWJVTg3ua0tzAqr4w0u6Ru39EQ_SoEP3BIsAzqD-tyRAqc2Kh-JgAmdfXyQoxXcjlfjMiPHxmcute0ksLPkcv9ssiEjEq0orA9qgC4hvj2Y4P--8W_ecZoWVBsPPSYNybiYE0l1GbId7PLvWdK5xJdRfMfgnlvuvPgrtvfR_Q5TwWY_gGAo4qhW1b-MuXTY_gBkhuZeO_v7h_8z3cTiTe8OVMunJSEFoEmnxS9-jMn9Tsxc7Tmn-H7ZOLqpegBaicEsQ7OcyQSFTa_H1tJeeGWHfKJXMz9yQJk_C6vWYw2Dt_o74CODF2kq2u_iULlgpa34oMuLJChhqAqjlQuMhVl8gIGL7slRsvJqyCYzlFfNFoCqGKaS63t4wONlVuP3P8qQ8LllTx6JTthjKQiSaWkOqkn9sEpyeab_tc12gk_fNE4FoYlLLbfosvR5A
-
-
-

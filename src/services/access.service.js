@@ -89,11 +89,12 @@ class AccessService {
         try {
             //1
             const foundShop = await findByEmail({ email })
-            if (!foundShop) throw BadRequestError('Login failed')
+            if (!foundShop) throw new BadRequestError('Login failed: Not found email')
             //2
-            const match = bcrypt.compare(password, foundShop.password)
+            const match = await bcrypt.compare(password, foundShop.password)
+            console.log("Match:::", match)
             if (!match) {
-                throw BadRequestError('Login failed')
+                throw new BadRequestError('Login failed: Wrong password')
             }
             //3
             const { privateKey, publicKey } = crypto.generateKeyPairSync('rsa', {
@@ -120,15 +121,11 @@ class AccessService {
 
             //5
             return {
-                shop: getIntoData({ object: foundShop, field: ["name", "email"] }),
+                shop: getIntoData({ object: foundShop, field: ["_id", "name", "email"] }),
                 tokens
             }
         } catch (error) {
-            return {
-                code: 'yy', // yy should point to login error in access.service
-                message: error.message,
-                status: error.status
-            }
+            throw error
         }
     }
 

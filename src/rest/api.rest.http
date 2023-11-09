@@ -23,8 +23,8 @@ Content-Type: application/json
 x-api-key: {{api_key}}
 
 {   
-    "email": "shop1@gmail.com",
-    "password": "shop1"
+    "email": "shop@gmail.com",
+    "password": "shopshop"
 }
 
 ### logout

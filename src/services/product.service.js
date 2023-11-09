@@ -2,7 +2,15 @@
 
 const { BadRequestError, NotFoundError } = require('../core/error.response')
 const { product, clothing, electronic } = require('../models/product.model')
-const { findAllDraftsForShop,findAllPublishedForShop, publishProductByShop, unpublishProductByShop } = require('../models/repositories/product.repo')
+const { 
+    findAllDraftsForShop,
+    findAllPublishedForShop, 
+    publishProductByShop, 
+    unpublishProductByShop,
+    searchProductsByUser,
+    searchAllProducts,
+    findProduct
+} = require('../models/repositories/product.repo')
 
 // defind Factory class to create product
 class ProductFactory {
@@ -11,11 +19,17 @@ class ProductFactory {
     }
 
     static productRegistry = {}
-
+    
     static async createProduct(type, payload) {
         const productClass = ProductFactory.productRegistry[type]
         if (!productClass) throw new BadRequestError(`Invalid product type: ${type}`)
         return await new productClass(payload).createProduct()
+    }
+    static findProduct = async (id) => {
+        return await findProduct({
+            id,
+            unSelect: ['__v', 'product_variations']
+        })
     }
 
     static findAllDraftsForShop = async ({ product_shop, limit=null, skip=0 }) => {
@@ -39,13 +53,25 @@ class ProductFactory {
         return foundProduct 
     }
     
-
     static unpublishProductByShop = async ( { product_shop, product_id } ) => {
         const foundProduct = await unpublishProductByShop({ product_shop, product_id })
         if (!foundProduct) throw new NotFoundError('Not found product for unpublishing')
         return foundProduct 
     }
 
+    static searchProductsByUser = async( { keySearch } ) => {
+        return await searchProductsByUser({ keySearch })
+    }
+
+    static searchAllProducts = async ({ sort='ctime', page=1, limit=50, filter={isPublished: true} }) => {
+        return await searchAllProducts( { 
+            filter, 
+            sort, 
+            page, 
+            limit,
+            select: ['product_name', 'product_thumb', 'product_price']
+        })
+    }
 }
 
 class Product {

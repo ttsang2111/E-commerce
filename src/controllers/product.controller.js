@@ -5,6 +5,27 @@ const { Created, SucessResponse } = require('../core/success.response.js')
 
 class ProductController {
 
+    static getProduct = async (req, res, next) => {
+        new SucessResponse({
+            message: "Get a product successfully",
+            metadata: await ProductService.findProduct(req.params.id)
+        }).send(res)
+    }
+
+    static getAllProducts = async (req, res, next) => {
+        new SucessResponse({
+            message: "Get all products successfully",
+            metadata: await ProductService.searchAllProducts(req.query)
+        }).send(res)
+    }
+
+    static getProductsByUser = async (req, res, next) => {
+        new SucessResponse({
+            message: "Get products by user successfully",
+            metadata: await ProductService.searchProductsByUser({ keySearch: req.params.keySearch })
+        }).send(res)
+    }
+
     static createProduct = async (req, res, next) => {
         new Created(
             {

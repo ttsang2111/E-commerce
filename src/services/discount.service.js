@@ -82,13 +82,13 @@ class DiscountService {
     }
 
     static getAllDiscountCodesByShopId = async (id) => {
-        return await findDiscountsSelect({
+        return await findDiscountsUnselect({
             filter: {
                 discount_shopId: convertStringToMongoDbObject(id)
             },
             page: 1,
             limit: 50,
-            select: ['discount_code','discount_shopId', 'discount_name', 'discount_value', "discount_applies_to", "discount_product_ids"]
+            unselect: ['__v', 'discount_shop_id']
         })
     }
 

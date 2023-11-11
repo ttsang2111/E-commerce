@@ -8,7 +8,7 @@ const { asyncHandler } = require('../../helpers/index.js')
 
 // Authentication
 router.use(authenticationV2)
-router.get('/all', asyncHandler(DiscountController.getAllDiscounts))
+router.get('/all', asyncHandler(DiscountController.getAllDiscountsByShop))
 router.get('/:code', asyncHandler(DiscountController.getAllProductsByDiscountCode))
 router.post('', asyncHandler(DiscountController.createDiscount))
 router.patch('', asyncHandler(DiscountController.updateDiscount))

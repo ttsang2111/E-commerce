@@ -18,9 +18,9 @@ const discountSChema = new Schema({
 
     discount_max_use: {type: Number, required: true},
     discount_used_count:{type: Number, required: true},
-    discount_used_users: {type: Array, default: []},
     discount_max_use_per_user: {type: Number, required: true},
     discount_min_order_value: {type: Number, required: true},
+    discount_used_users: {type: Array, default: []},
     
     discount_is_active: {type: Boolean, required: true, default: false},
     discount_applies_to: {type: String, required: true, enum: ['all', 'specific']},

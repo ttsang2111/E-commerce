@@ -1,11 +1,11 @@
 'use strict'
 
 const AccessService = require('../services/access.service.js')
-const { Created, SucessResponse } = require('../core/success.response.js')
+const { Created, SuccessResponse } = require('../core/success.response.js')
 
 class AccessController {
     static handleRefreshToken = async (req, res, next) => {
-        new SucessResponse(
+        new SuccessResponse(
             {
                 message: 'Refresh token',
                 metadata: await AccessService.handleRefreshTokenV2({ keyStore: req.keyStore, user: req.user, refreshToken: req.refreshToken })
@@ -14,7 +14,7 @@ class AccessController {
     }
 
     static logout = async (req, res, next) => {
-        new SucessResponse(
+        new SuccessResponse(
             {
                 message: "Logout successfully",
                 metadata: await AccessService.logout({ keyStore: req.keyStore })
@@ -23,7 +23,7 @@ class AccessController {
     }
 
     static login = async (req, res, next) => {
-        new SucessResponse(
+        new SuccessResponse(
             {
                 message: "Login successfully",
                 metadata: await AccessService.login(req.body)

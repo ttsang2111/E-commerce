@@ -41,17 +41,17 @@ class ProductFactory {
         })
     }
 
-    static findAllDraftsForShop = async ({ product_shop, limit=null, skip=0 }) => {
+    static findAllDraftsForShop = async ({ product_shop, limit=50, skip=0 }) => {
         const query = { product_shop, isDraft: true }
         return await findAllDraftsForShop({ query, limit, skip })
     }
 
-    static findAllPublishedForShop = async ({ product_shop, limit=null, skip=0 }) => {
+    static findAllPublishedForShop = async ({ product_shop, limit=50, skip=0 }) => {
         const query = { product_shop, isPublished: true }
         return await findAllPublishedForShop({ query, limit, skip })
     }
 
-    static findAllUnpublishedForShop = async ({ product_shop, limit=null, skip=0 }) => {
+    static findAllUnpublishedForShop = async ({ product_shop, limit=50, skip=0 }) => {
         const query = { product_shop, isPublished: false }
         return await findAllPublishedForShop({ query, limit, skip })
     }
@@ -72,13 +72,13 @@ class ProductFactory {
         return await searchProductsByUser({ keySearch })
     }
 
-    static searchAllProducts = async ({ sort='ctime', page=1, limit=50, filter={isPublished: true} }) => {
+    static searchAllProducts = async ({ sort='ctime', page=1, limit=50, filter={ isPublished: true} }) => {
         return await searchAllProducts( { 
             filter, 
             sort, 
             page, 
             limit,
-            select: ['product_name', 'product_thumb', 'product_price']
+            select: ['product_name', 'product_thumb', 'product_price', 'product_shop']
         })
     }
 }
@@ -167,10 +167,11 @@ class Electronic extends Product {
         const objParams = removeUndefinedObject(this)
 
         if(objParams.product_attributes) {
-            await updateProductById({productId, bodyUpdate: objParams.product_attributes, model: electronic})
+            const attributesObjParams = removeUndefinedObject(objParams.product_attributes)
+            await updateProductById({productId, bodyUpdate: updateNestedObjectParser(attributesObjParams), model: electronic})
         }
 
-        const updatedProduct = await super.updateProduct(productId, objParams)
+        const updatedProduct = await super.updateProduct(productId, updateNestedObjectParser(objParams))
         return updatedProduct
     }
 }

@@ -38,12 +38,12 @@ class CartService {
                 'cart_products.$.quantity': quantity
             }
         }, options = {upsert: true, new: true}
-        return await findOneAndUpdate(query, updateSet, options)
+        return await cart.findOneAndUpdate(query, updateSet, options)
     }
 
     static async addToCart({ userId, product = {} }) {
         // check  existance of cart in db
-        const userCart = await findOne({ cart_userId: userId })
+        const userCart = await cart.findOne({ cart_userId: userId })
         if (!userCart) {
             // create a new cart
             return await CartService.createUserCart({ userId, product })
@@ -78,7 +78,7 @@ class CartService {
             }
         ]
     */
-    static async addToCartV2 ({ userId, product = {} }) {
+    static async addToCartV2 ({ userId, shop_order_ids }) {
         const { productId, quantity, old_quantity } = shop_order_ids[0]?.item_products[0]
         // check product
         const foundProduct = await getProductById(productId)
@@ -90,6 +90,7 @@ class CartService {
 
         if(quantity == 0) {
             // deleted
+            return await CartService.deleteUserCart({ userId, productId })
         }
 
         return await CartService.updateUserCartQuantity({

@@ -24,7 +24,7 @@ const cartSChema = new Schema({
         ]
     */
    cart_count_product: {type: Number, default: 0},
-   cart_user_id: {type: Number, required: true}
+   cart_userId: {type: Number, required: true}
 }, {
     collection: COLLECTION_NAME,
     timeseries: {

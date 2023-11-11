@@ -1,6 +1,6 @@
 'use strict'
 
-const { BadRequestError } = require("../core/error.response")
+const { BadRequestError, NotFoundError } = require("../core/error.response")
 const { validateDiscountInput } = require("../helpers/validate.input")
 const { convertStringToMongoDbObject, removeUndefinedObject } = require("../utils")
 const discount = require("../models/discount.model")
@@ -126,6 +126,69 @@ class DiscountService {
         })
     }
 
+    /*
+        Apply Discount Code
+        products = [
+            {
+                productId,
+                shopId,
+                quantity,
+                name,
+                price
+            },
+            {
+                productId,
+                shopId,
+                quantity,
+                name,
+                price
+            }
+        ]
+    */
+    static getDiscountAmount = async ({ code, userId, shopId, products }) => {
+        
+        const foundDiscount = await findOneByCodeAndShopId({ code, shopId })
+        
+        if(!foundDiscount) throw new NotFoundError(`Discount doesn't exist.`)
+
+        const {
+            discount_is_active,
+            discount_max_use,
+            discount_min_order_value,
+            discount_used_users,
+            discount_max_use_per_user,
+            discount_value
+        } = foundDiscount
+
+        validateDiscountInput(foundDiscount)
+        if(!discount_is_active) throw new NotFoundError('Discount expired')
+        if(!discount_max_use) throw new NotFoundError('Discount is out')
+
+        // check min order value
+        let totalOrder = 0
+        if (discount_min_order_value > 0) {
+            totalOrder = products.reduce((acc, product) => {
+                return acc + (product.quantity * product.price)
+            }, 0)
+            
+            if(totalOrder < discount_min_order_value) {
+                throw new NotFoundError(`Discount requires a minimum order value of ${discount_min_order_value}`)
+            }
+        }
+
+        if (discount_max_use_per_user > 0) {
+            const userUsedDiscount = discount_used_users.find(user => user.userId === userId)
+            if (userUsedDiscount) {
+                // ...
+            }
+        }
+        const amount = discount_type === 'fixed_amount' ? discount_value : totalOrder * (discount_value / 100)
+        return {
+            totalOrder,
+            discount: amount,
+            totalPrice: totalOrder - amount
+        }
+    }
 }
 
 module.exports = DiscountService

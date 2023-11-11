@@ -18,10 +18,7 @@ class DiscountController {
     static getAllProductsByDiscountCode = async (req, res, next) => {
         new SucessResponse({
             message: "Get all products by discount code successfully",
-            metadata: await DiscountService.getAllProductsByDiscountCode({
-                shopId: req.user.userId,
-                code: req.params.code
-            })
+            metadata: await DiscountService.getAllProductsByDiscountCode(req.query)
         }).send(res)
     }
     

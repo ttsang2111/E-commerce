@@ -12,6 +12,7 @@ router.get('/search/:keySearch', asyncHandler(ProductController.getProductsByUse
 router.use(authenticationV2)
 
 router.post('', asyncHandler(ProductController.createProduct))
+router.patch('/:productId', asyncHandler(ProductController.updateProduct))
 router.post('/publish/:id', asyncHandler(ProductController.publishProductByShop))
 router.post('/unpublish/:id', asyncHandler(ProductController.unpublishProductByShop))
 // Query

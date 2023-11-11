@@ -4,6 +4,15 @@ const { product, clothing, electronic } = require('../product.model')
 const { Types } = require('mongoose')
 const { getSelectedData, getUnSelectedData } = require('../../utils/index')
 
+const updateProductById = async ({
+    product_id, 
+    bodyUpdate, 
+    model,
+    isNew=true
+}) => {
+    return await model.findOneAndUpdate(product_id, bodyUpdate, {new: isNew})
+}
+
 const findProduct = async ({id, unSelect}) => {
     const foundProduct = await product.findOne({
         _id: id
@@ -42,7 +51,7 @@ const unpublishProductByShop = async ({ product_shop, product_id }) => {
     return foundProduct
 }
 
-const searchProductsByUser = async ({ keySearch }) => {
+const findProductsByUser = async ({ keySearch }) => {
     const regexSearch = new RegExp(keySearch)
     const results = await product.find({
         $text: {
@@ -56,7 +65,7 @@ const searchProductsByUser = async ({ keySearch }) => {
     return results
 }
 
-const searchAllProducts = async ({ sort, page, limit, filter, select }) => {
+const findAllProducts = async ({ sort, page, limit, filter, select }) => {
     const skip = (page - 1) * limit
     const sortBy = sort === 'ctime' ? {_id: -1} : {_id: 1}
     const foundProducts = await product
@@ -84,7 +93,8 @@ module.exports = {
     findAllPublishedForShop,
     publishProductByShop,
     unpublishProductByShop,
-    searchProductsByUser,
-    searchAllProducts,
-    findProduct
+    searchProductsByUser: findProductsByUser,
+    searchAllProducts: findAllProducts,
+    findProduct,
+    updateProductById
 }

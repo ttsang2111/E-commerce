@@ -9,8 +9,11 @@ const {
     unpublishProductByShop,
     searchProductsByUser,
     searchAllProducts,
-    findProduct
+    findProduct,
+    updateProductById
 } = require('../models/repositories/product.repo')
+const { insertInventory } = require('../models/repositories/inventory.repo')
+const { removeUndefinedObject, updateNestedObjectParser } = require('../utils/index')
 
 // defind Factory class to create product
 class ProductFactory {
@@ -20,6 +23,12 @@ class ProductFactory {
 
     static productRegistry = {}
     
+    static async updateProduct(type, productId, payload) {
+        const productClass = ProductFactory.productRegistry[type]
+        if (!productClass) throw new BadRequestError(`Invalid product type: ${type}`)
+        return await new productClass(payload).updateProduct(productId)
+    }
+
     static async createProduct(type, payload) {
         const productClass = ProductFactory.productRegistry[type]
         if (!productClass) throw new BadRequestError(`Invalid product type: ${type}`)
@@ -91,10 +100,23 @@ class Product {
 
     // create new product
     async createProduct(product_id) {
-        return await product.create({
+        const newProduct = await product.create({
             _id: product_id,
             ...this
         })
+        if (newProduct) {
+            await insertInventory({
+                stock: this.product_quantity,
+                shopId: this.product_shop,
+                productId: newProduct._id
+            })
+        }
+
+        return newProduct
+    }
+
+    async updateProduct(productId, bodyUpdate) {
+        return await updateProductById({productId, bodyUpdate, model: product})
     }
 }
 
@@ -113,6 +135,17 @@ class Clothing extends Product {
 
         return newProduct
     }
+
+    async updateProduct(productId) {
+        const objParams = this
+
+        if(objParams.product_attributes) {
+            await updateProductById({productId, bodyUpdate, model: clothing})
+        }
+
+        const updatedProduct = await super.updateProduct(productId, objParams)
+        return updatedProduct
+    }
 }
 
 class Electronic extends Product {
@@ -128,6 +161,17 @@ class Electronic extends Product {
         if (!newProduct) throw new BadRequestError('Create new Product error')
 
         return newProduct
+    }
+
+    async updateProduct(productId) {
+        const objParams = removeUndefinedObject(this)
+
+        if(objParams.product_attributes) {
+            await updateProductById({productId, bodyUpdate: objParams.product_attributes, model: electronic})
+        }
+
+        const updatedProduct = await super.updateProduct(productId, objParams)
+        return updatedProduct
     }
 }
 ProductFactory.registerProductType('Clothing', Clothing)

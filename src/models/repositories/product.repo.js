@@ -97,7 +97,7 @@ const queryProduct = async ({ query, limit, skip }) => {
 }
 
 const getProductById = async (productId) => {
-    return await product.findOne({ _id: convertStringToMongoDbObject(productId) }).pop
+    return await product.findOne({ _id: convertStringToMongoDbObject(productId) }).lean()
 }
 
 module.exports = {

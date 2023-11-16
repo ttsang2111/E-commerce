@@ -1,7 +1,7 @@
 'use strict'
 
 const { getProduct } = require('../controllers/product.controller')
-const { NotFoundError } = require('../core/error.response')
+const { NotFoundError, BadRequestError } = require('../core/error.response')
 const { cart } = require('../models/cart.model')
 const { getProductById } = require('../models/repositories/product.repo')
 /*
@@ -29,6 +29,7 @@ class CartService {
 
     static async updateUserCartQuantity({ userId, product }) {
         const { productId, quantity } = product
+        if (!productId || !quantity) throw new BadRequestError('Invalid input!')
         const query = {
             cart_userId: userId,
             'cart_products.productId': productId,
@@ -41,9 +42,10 @@ class CartService {
         return await cart.findOneAndUpdate(query, updateSet, options)
     }
 
-    static async addToCart({ userId, product = {} }) {
+    static async addToCart({ userId, product }) {
         // check  existance of cart in db
         const userCart = await cart.findOne({ cart_userId: userId })
+        // get product in db
         if (!userCart) {
             // create a new cart
             return await CartService.createUserCart({ userId, product })
@@ -54,36 +56,40 @@ class CartService {
             userCart.cart_products = [product]
             return await userCart.save()
         }
+        // In case cart already exists but not found product
+        if (!userCart.cart_products.find(p => p.productId === product.productId)) {
+            userCart.cart_products.push(product)
+            return await userCart.save()
+        }
 
-        // In case both cart already exists and has product
+        // In case both cart and product already exist
         return await CartService.updateUserCartQuantity({ userId, product })
     }
 
     // update a cart
-    /*
+    static async addToCartV2 ({ userId, shop_order_ids }) {
+        /*
         shop_order_ids: [
             {
                 shopId,
                 item_products: [
                     {
-                        quantity,
-                        price,
+                        productId,
                         shopId,
+                        price,
                         old_quantity,
-                        quantity,
-                        productId
+                        quantity
                     }
                 ],
                 version
             }
         ]
     */
-    static async addToCartV2 ({ userId, shop_order_ids }) {
         const { productId, quantity, old_quantity } = shop_order_ids[0]?.item_products[0]
-        // check product
+        // check product existance
         const foundProduct = await getProductById(productId)
         if(!foundProduct) throw new NotFoundError("Not Found Product")
-        // compare
+        // check product shop
         if(foundProduct.product_shop.toString() !== shop_order_ids[0]?.shopId) {
             throw new NotFoundError('Product does not belong to the shop')
         }

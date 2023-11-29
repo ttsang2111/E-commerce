@@ -1,7 +1,7 @@
 'use strict'
 
 const { BadRequestError, NotFoundError } = require('../core/error.response')
-const { product, clothing, electronic } = require('../models/product.model')
+const { product, clothing, electronic, furniture } = require('../models/product.model')
 const { 
     findAllDraftsForShop,
     findAllPublishedForShop, 
@@ -137,13 +137,14 @@ class Clothing extends Product {
     }
 
     async updateProduct(productId) {
-        const objParams = this
+        const objParams = removeUndefinedObject(this)
 
         if(objParams.product_attributes) {
-            await updateProductById({productId, bodyUpdate, model: clothing})
+            const attributesObjParams = removeUndefinedObject(objParams.product_attributes)
+            await updateProductById({productId, bodyUpdate: updateNestedObjectParser(attributesObjParams), model: clothing})
         }
 
-        const updatedProduct = await super.updateProduct(productId, objParams)
+        const updatedProduct = await super.updateProduct(productId, updateNestedObjectParser(objParams))
         return updatedProduct
     }
 }
@@ -175,8 +176,38 @@ class Electronic extends Product {
         return updatedProduct
     }
 }
+
+class Furniture extends Product {
+
+    async createProduct() {
+        const newFurniture = await furniture.create({
+            ...this.product_attributes,
+            product_shop: this.product_shop
+        })
+        if (!newFurniture) throw new BadRequestError('Create new Furniture error')
+
+        const newProduct = await super.createProduct(newFurniture._id)
+        if (!newProduct) throw new BadRequestError('Create new Product error')
+
+        return newProduct
+    }
+
+    async updateProduct(productId) {
+        const objParams = removeUndefinedObject(this)
+
+        if(objParams.product_attributes) {
+            const attributesObjParams = removeUndefinedObject(objParams.product_attributes)
+            await updateProductById({productId, bodyUpdate: updateNestedObjectParser(attributesObjParams), model: furniture})
+        }
+
+        const updatedProduct = await super.updateProduct(productId, updateNestedObjectParser(objParams))
+        return updatedProduct
+    }
+}
+
 ProductFactory.registerProductType('Clothing', Clothing)
 ProductFactory.registerProductType('Electronic', Electronic)
+ProductFactory.registerProductType('Furniture', Furniture)
 
 module.exports = {
     ProductService: ProductFactory

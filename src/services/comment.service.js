@@ -42,7 +42,7 @@ class CommentService {
             })
 
         } else {
-            const maxRightValue = await comment.findOne({
+            const maxRightValue = await Comment.findOne({
                 comment_productId: convertStringToMongoDbObject(productId),
             }, 'comment_right', { sort: { comment_right: -1 } });
             if (maxRightValue) {
@@ -66,11 +66,12 @@ class CommentService {
         limit=50,
         offset=0 // skip
     }) {
+        let comments;
         if (parentCommentId) {
             const parent = await Comment.findById(parentCommentId);
             if (!parent) throw new NotFoundError("Not found comment for product");
             
-            const comments = await Comment.find({
+            comments = await Comment.find({
                 comment_productId: convertStringToMongoDbObject(productId),
                 comment_left: { $gt: parent.comment_left},
                 comment_right: { $lte: parent.comment_right}
@@ -85,6 +86,19 @@ class CommentService {
 
             return comments;
         }
+
+        comments = await Comment.find({
+            comment_productId: convertStringToMongoDbObject(productId)
+        }).select({
+            comment_left: 1,
+            comment_right: 1,
+            comment_content: 1,
+            comment_parentId: 1
+        }).sort({
+            comment_left: 1
+        })
+
+        return comments;
     }
 }
 

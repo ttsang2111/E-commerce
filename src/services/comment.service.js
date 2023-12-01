@@ -2,6 +2,7 @@
 const { convertStringToMongoDbObject } = require('../utils');
 const { NotFoundError } = require('../core/error.response');
 const Comment = require('../models/comment.model');
+const { findProduct } = require('../models/repositories/product.repo');
 /*
     key features: Comment service
     + add comment [User, Shop]
@@ -73,6 +74,7 @@ class CommentService {
             
             comments = await Comment.find({
                 comment_productId: convertStringToMongoDbObject(productId),
+                isDeleted: false,
                 comment_left: { $gt: parent.comment_left},
                 comment_right: { $lte: parent.comment_right}
             }).select({
@@ -99,6 +101,47 @@ class CommentService {
         })
 
         return comments;
+    }
+    
+    static async deleteComments({ commentId, productId }) {
+        // check the product exists in database
+        const foundProduct = await findProduct({id: productId});
+        if (!foundProduct) throw new NotFoundError("Not Found Product!");
+
+        // check the comment exists in database
+        const comment = await Comment.findById(commentId);
+        if (!comment) throw new NotFoundError("Not Found Comment!");
+
+        const leftValue = comment.comment_left;
+        const rightValue = comment.comment_right;
+        // calculate width 
+        const width = rightValue - leftValue + 1;
+
+        // delete comment and nested comments
+        await Comment.deleteMany({
+            comment_productId: convertStringToMongoDbObject(productId),
+            comment_left: { $gt: leftValue },
+            comment_right: { $lte: rightValue }
+        })
+
+        // update remain comments
+        await Comment.updateMany({
+            comment_productId: convertStringToMongoDbObject(productId),
+            comment_left: { $gt: rightValue }
+        }, {
+            $inc: {
+                comment_left: -width
+            }
+        });
+
+        await Comment.updateMany({
+            comment_productId: convertStringToMongoDbObject(productId),
+            comment_right: { $gt: rightValue }
+        }, {
+            $inc: {
+                comment_right: -width
+            }
+        });
     }
 }
 

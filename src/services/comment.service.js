@@ -150,7 +150,6 @@ class CommentService {
                 comment_right: -width
             }
         });
-
         return comment;
     }
 }

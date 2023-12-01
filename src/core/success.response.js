@@ -10,7 +10,7 @@ const reasonStatusCode = {
     CREATED: 'Created'
 }
 
-class SucessResponse {
+class SuccessResponse {
     constructor({message, status, metadata={}}) {
         this.message = message
         this.status = status
@@ -22,13 +22,13 @@ class SucessResponse {
     }
 }
 
-class Created extends SucessResponse {
+class Created extends SuccessResponse {
     constructor({message=reasonStatusCode.CREATION, status=statusCode.CREATION, metadata}) {
         super({message, status, metadata})
     }
 }
 
-class Ok extends SucessResponse {
+class Ok extends SuccessResponse {
     constructor({message=reasonStatusCode.OK, status=statusCode.OK}) {
         super({message, status, metadata})
     }
@@ -36,5 +36,6 @@ class Ok extends SucessResponse {
 
 module.exports = {
     Created,
-    Ok
+    Ok,
+    SuccessResponse
 }

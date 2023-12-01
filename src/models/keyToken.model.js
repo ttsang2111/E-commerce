@@ -1,9 +1,9 @@
 const { Schema, model } = require('mongoose');
 
-const DOCUMENT_NAME = 'Key'
-const COLLECTION_NAME = 'Keys'
+const DOCUMENT_NAME = 'TokenKey'
+const COLLECTION_NAME = 'TokenKeys'
 
-var keyTokenSchema = new Schema({
+var tokenKeySchema = new Schema({
     userId: {
         type: Schema.Types.ObjectId,
         required: true,
@@ -13,7 +13,20 @@ var keyTokenSchema = new Schema({
         type: String,
         required: true
     },
+    privateKey: {
+        type: String,
+        required: true
+    },
+    accessToken: {
+        type: String,
+        required: true
+    },
+    
     refreshToken: {
+        type: String,
+        required: true
+    },
+    refreshTokenUsed: {
         type: Array,
         default: []
     }
@@ -23,4 +36,4 @@ var keyTokenSchema = new Schema({
 });
 
 
-module.exports = model(DOCUMENT_NAME, keyTokenSchema);
+module.exports = model(DOCUMENT_NAME, tokenKeySchema);

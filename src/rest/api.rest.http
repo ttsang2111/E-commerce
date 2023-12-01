@@ -1,0 +1,75 @@
+@url_dev=http://localhost:3050/v1/api
+@api_key=test_api_key
+
+### test middleware
+GET {{url_dev}}/test
+x-api-key: {{api_key}}
+
+
+### sign up
+POST {{url_dev}}/shop/signup
+Content-Type: application/json
+x-api-key: {{api_key}}
+
+{   
+    "name": "shop1",
+    "email": "shop1@gmail.com",
+    "password": "shop"
+}
+
+### login
+POST {{url_dev}}/shop/login
+Content-Type: application/json
+x-api-key: {{api_key}}
+
+{   
+    "email": "shop@gmail.com",
+    "password": "shopshop"
+}
+
+### logout
+POST {{url_dev}}/shop/logout
+Content-Type: application/json
+x-api-key: {{api_key}}
+x-client-id: 6545726634b1fce5c8b56ed1
+x-rtoken-id: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTQ1NzI2NjM0YjFmY2U1YzhiNTZlZDEiLCJlbWFpbCI6InNob3BAZ21haWwuY29tIiwiaWF0IjoxNjk5Mjk4NjU4LCJleHAiOjE2OTk5MDM0NTh9.kcDaUZMVpDPDp_ORLgjT2TN4vQYjOeMVBpmP98BYATCBNkb7gTYUQGpNIH1cEfobS-BuoDobwOSKXSsqNGCg43vC88oOFX-u0-cmimndr9x9KbDKBTIO3pfKgkMk60TsCO-6tShyuJduuXxpEKg39XSc1mdSZKtiOoG7Ddh_wyGLkjsiguMQJZH7xPIZvYdqf3Yre2-TkKetj37fw_Jruh1HkqP_HTmiXn4S_uP8MzXxtdrqqtjd2_P3THMDAZRX3M6rdOfBZMlVy-_7S9JiOUZe62gzgpb2qZVsdvnGl1ZVwKj4II3Pr6js2f8ut3ApOVPrNpMOr4tdhpB7-FElizfgJpl8_IfXc8in_GSUn5WfSlzpVYqyb5t8rh2Pqdj2IOmOrtLqi_PPHzNDsEYrKTKPoagMakGA7Zc6wnyPbrCQIfUspfUfrD-h88qj_Clv4gfzSjBwaKQ58yK-I2kpF7YYt5XKh4QhGmmORekbVnRbAqTw_lJq4DnMsCP5e1L7fr82B7qEhHgFMttFOPsK09cKKzTkzgo-Md0q1-khw4pONtmmAJzCkyesCT74A6WhoMDt_EnuAgficLCNbOsRE58BC0BAUazjcapo7TPNkfxEcmynnjazUa7v-qz1JVVpfxvj_ylCcr1zs6Q_mXPTOfehWfftalTIPqTIDAjI_oM
+
+### refresh token
+POST {{url_dev}}/shop/refreshToken
+Content-Type: application/json
+x-api-key: {{api_key}}
+x-client-id: 6545726634b1fce5c8b56ed1
+x-rtoken-id: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTQ1NzI2NjM0YjFmY2U1YzhiNTZlZDEiLCJlbWFpbCI6InNob3BAZ21haWwuY29tIiwiaWF0IjoxNjk5Mjk4Njg5LCJleHAiOjE2OTk5MDM0ODl9.F-pwD3jXFS1OXGEfTXIPGgDpcshM4gcauVMGv3pw9tnG-7q_pbAvRawUR0CqLy-LWDCyIbZ6xVE8uuZPzw3uctZuBD9vZRPRHUFtoG7TmGB_ZX5zkAckNDyMtv-NoFCr8O1nYyey1oNhQQb51TI2emi2fJyK6OmAlYhs8MmnyvMrbD_wDNGsCtrtQUQ_C0KBwfG8IE46dQqWMdCDd0UAN5LqwDS858fgU5XOFs6KwFjAL0LCVPlUG_cqXFUrtMoSBTtacZt0YBv3SMwoAQ6ose6tIk8bNPfsMzYtVfDA5uDvd-owhSHoH8EWZO0nKAUObquElFH5YYn5tSSEMcIlMhB28jqvEkf7otCTDMjTOmjAH3gMT3VqTXm9zVVsAXqJUh0l_YMdaSu-_2NEPl6PbLpq5wuMNHXX3XXo_Fai4KNiYXCSZ25voLw72aoDYd-9Fu2TuH6XwSP8awpo7o5CcluLONt0qd5xMzUmkhvg8XYg6c2RJ_zEMEql3PyrWizgMBgkFRJEDCsoLJHbkeupBhUf99SoGxw7FVvVljsS5RRVejo26Tx5tgDQsYiHnmwAM9hnTrEyKfie0fjSYttOnyDkGXGBJqj-PPEocTJCaTgkuUGxHtN7QpfZ2BwbT81w9uhT8v7lCOqpZ_3rEoBRaB5A1xw3OJYeZbZwY2vGjKk
+
+### create clothing product
+POST {{url_dev}}/product
+Content-Type: application/json
+x-api-key: {{api_key}}
+x-client-id: 6549cae99382ca3a5cdb6873
+x-rtoken-id: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTQ5Y2FlOTkzODJjYTNhNWNkYjY4NzMiLCJlbWFpbCI6InNob3BAZ21haWwuY29tIiwiaWF0IjoxNjk5MzM0ODg5LCJleHAiOjE2OTk5Mzk2ODl9.CLL_dMkEpAa4oroJTT3BaAxlA_G7ICD9bVVLpeX1uhFegtQ37AfmKBe3EVyIE8owkqYziA05R3VySow2nc-Rf3BHqYDt3oDg6G1NPE2uqQg_9lC4dBp3icEtGhVgqstwa6SmyF500eduoF0TCHjVODyuJz29Ob48W0qLwteUsLRyRD1_A3BbZglqXZo6mIA-FeGcPK3wEc-Rp2vQR2U3d0qjy3h5HXFQgJpq9_GnmG4ScdNhWJVTg3ua0tzAqr4w0u6Ru39EQ_SoEP3BIsAzqD-tyRAqc2Kh-JgAmdfXyQoxXcjlfjMiPHxmcute0ksLPkcv9ssiEjEq0orA9qgC4hvj2Y4P--8W_ecZoWVBsPPSYNybiYE0l1GbId7PLvWdK5xJdRfMfgnlvuvPgrtvfR_Q5TwWY_gGAo4qhW1b-MuXTY_gBkhuZeO_v7h_8z3cTiTe8OVMunJSEFoEmnxS9-jMn9Tsxc7Tmn-H7ZOLqpegBaicEsQ7OcyQSFTa_H1tJeeGWHfKJXMz9yQJk_C6vWYw2Dt_o74CODF2kq2u_iULlgpa34oMuLJChhqAqjlQuMhVl8gIGL7slRsvJqyCYzlFfNFoCqGKaS63t4wONlVuP3P8qQ8LllTx6JTthjKQiSaWkOqkn9sEpyeab_tc12gk_fNE4FoYlLLbfosvR5A
+
+{
+    "product_name": "IPhone XS",
+    "product_thumb": "product_thumb",
+    "product_description": "512 GB",
+    "product_price": 10,
+    "product_quantity": 1,
+    "product_type": "Electronic",
+    "product_attributes": {
+        "manifacturer": "Apple"
+    }
+}
+
+### Get products
+GET {{url_dev}}/product/unpublished/all
+Content-Type: application/json
+x-api-key: {{api_key}}
+x-client-id: 6549cae99382ca3a5cdb6873
+x-rtoken-id: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTQ5Y2FlOTkzODJjYTNhNWNkYjY4NzMiLCJlbWFpbCI6InNob3BAZ21haWwuY29tIiwiaWF0IjoxNjk5MzM0ODg5LCJleHAiOjE2OTk5Mzk2ODl9.CLL_dMkEpAa4oroJTT3BaAxlA_G7ICD9bVVLpeX1uhFegtQ37AfmKBe3EVyIE8owkqYziA05R3VySow2nc-Rf3BHqYDt3oDg6G1NPE2uqQg_9lC4dBp3icEtGhVgqstwa6SmyF500eduoF0TCHjVODyuJz29Ob48W0qLwteUsLRyRD1_A3BbZglqXZo6mIA-FeGcPK3wEc-Rp2vQR2U3d0qjy3h5HXFQgJpq9_GnmG4ScdNhWJVTg3ua0tzAqr4w0u6Ru39EQ_SoEP3BIsAzqD-tyRAqc2Kh-JgAmdfXyQoxXcjlfjMiPHxmcute0ksLPkcv9ssiEjEq0orA9qgC4hvj2Y4P--8W_ecZoWVBsPPSYNybiYE0l1GbId7PLvWdK5xJdRfMfgnlvuvPgrtvfR_Q5TwWY_gGAo4qhW1b-MuXTY_gBkhuZeO_v7h_8z3cTiTe8OVMunJSEFoEmnxS9-jMn9Tsxc7Tmn-H7ZOLqpegBaicEsQ7OcyQSFTa_H1tJeeGWHfKJXMz9yQJk_C6vWYw2Dt_o74CODF2kq2u_iULlgpa34oMuLJChhqAqjlQuMhVl8gIGL7slRsvJqyCYzlFfNFoCqGKaS63t4wONlVuP3P8qQ8LllTx6JTthjKQiSaWkOqkn9sEpyeab_tc12gk_fNE4FoYlLLbfosvR5A
+
+### Publish/Unpublish a product
+POST {{url_dev}}/product/unpublish/6549d22bc96d4f838d4870de
+Content-Type: application/json
+x-api-key: {{api_key}}
+x-client-id: 6549cae99382ca3a5cdb6873
+x-rtoken-id: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTQ5Y2FlOTkzODJjYTNhNWNkYjY4NzMiLCJlbWFpbCI6InNob3BAZ21haWwuY29tIiwiaWF0IjoxNjk5MzM0ODg5LCJleHAiOjE2OTk5Mzk2ODl9.CLL_dMkEpAa4oroJTT3BaAxlA_G7ICD9bVVLpeX1uhFegtQ37AfmKBe3EVyIE8owkqYziA05R3VySow2nc-Rf3BHqYDt3oDg6G1NPE2uqQg_9lC4dBp3icEtGhVgqstwa6SmyF500eduoF0TCHjVODyuJz29Ob48W0qLwteUsLRyRD1_A3BbZglqXZo6mIA-FeGcPK3wEc-Rp2vQR2U3d0qjy3h5HXFQgJpq9_GnmG4ScdNhWJVTg3ua0tzAqr4w0u6Ru39EQ_SoEP3BIsAzqD-tyRAqc2Kh-JgAmdfXyQoxXcjlfjMiPHxmcute0ksLPkcv9ssiEjEq0orA9qgC4hvj2Y4P--8W_ecZoWVBsPPSYNybiYE0l1GbId7PLvWdK5xJdRfMfgnlvuvPgrtvfR_Q5TwWY_gGAo4qhW1b-MuXTY_gBkhuZeO_v7h_8z3cTiTe8OVMunJSEFoEmnxS9-jMn9Tsxc7Tmn-H7ZOLqpegBaicEsQ7OcyQSFTa_H1tJeeGWHfKJXMz9yQJk_C6vWYw2Dt_o74CODF2kq2u_iULlgpa34oMuLJChhqAqjlQuMhVl8gIGL7slRsvJqyCYzlFfNFoCqGKaS63t4wONlVuP3P8qQ8LllTx6JTthjKQiSaWkOqkn9sEpyeab_tc12gk_fNE4FoYlLLbfosvR5A

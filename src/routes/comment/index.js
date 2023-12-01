@@ -9,7 +9,7 @@ router.get('', asyncHandler(CommentController.getCommentsByParentId))
 // Authentication
 router.use(authenticationV2)
 ////////////////////////////////
-
+router.delete('/delete', asyncHandler(CommentController.deleteComments))
 router.post('', asyncHandler(CommentController.createComment))
 
 module.exports = router

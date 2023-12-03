@@ -1,3 +1,4 @@
+require('dotenv').config()
 const express = require('express');
 const morgan = require('morgan');
 const helmet = require('helmet');
@@ -11,13 +12,6 @@ app.use(compression())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true}))
 
-// test pub sub redis
-const InventoryServiceTest = require('./test/inventory.test.js');
-(async () => {
-    await InventoryServiceTest.subscribe();
-})();
-const test_product = require('./test/product.test.js')
-test_product.purchaseProduct("001", 100)
 
 // init database
 require('./dbs/init.mongodb.js')

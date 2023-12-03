@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const { db: {host, port, name} } = require('../configs/index.js')
+const { host, port, name } = require('../configs/index.js')('mongodb')
 
 class Database {
     constructor() {

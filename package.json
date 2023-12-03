@@ -23,6 +23,7 @@
   "homepage": "https://github.com/ttsang2111/E-commerce#readme",
   "dependencies": {
     "bcrypt": "^5.1.1",
+    "cloudinary": "^1.41.0",
     "compression": "^1.7.4",
     "crypto": "^1.0.1",
     "discord.js": "^14.14.1",

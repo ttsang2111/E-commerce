@@ -1,3 +1,4 @@
+require('dotenv').config()
 const app = require('./src/app.js')
 const { port } = require('./src/configs/index.js')('app')
 

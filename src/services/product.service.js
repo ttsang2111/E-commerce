@@ -14,7 +14,7 @@ const {
 } = require('../models/repositories/product.repo')
 const { insertInventory } = require('../models/repositories/inventory.repo')
 const { removeUndefinedObject, updateNestedObjectParser } = require('../utils/index')
-const { pushNotiToSystem } = require('./notification.service')
+// const { pushNotiToSystem } = require('./notification.service')
 
 // defind Factory class to create product
 class ProductFactory {

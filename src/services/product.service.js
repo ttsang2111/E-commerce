@@ -14,6 +14,7 @@ const {
 } = require('../models/repositories/product.repo')
 const { insertInventory } = require('../models/repositories/inventory.repo')
 const { removeUndefinedObject, updateNestedObjectParser } = require('../utils/index')
+// const { pushNotiToSystem } = require('./notification.service')
 
 // defind Factory class to create product
 class ProductFactory {
@@ -105,11 +106,25 @@ class Product {
             ...this
         })
         if (newProduct) {
-            await insertInventory({
+            // add product_stock in inventory collection
+            const invenData = await insertInventory({
                 stock: this.product_quantity,
                 shopId: this.product_shop,
                 productId: newProduct._id
             })
+            // push notification to system collection
+            pushNotiToSystem({
+                type: 'SHOP-001',
+                receiverId: 1,
+                senderId: this.product_shop,
+                options: {
+                    product_name: this.product_name,
+                    shop_name: this.product_shop
+                }
+            }).then( rs => console.log(rs))
+            .catch(console.error)
+            
+            console.log("invenData:::", invenData)
         }
 
         return newProduct

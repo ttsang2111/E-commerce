@@ -6,7 +6,6 @@ const { checkProductByServer } = require('../models/repositories/product.repo')
 const { getDiscountAmount } = require("./discount.service")
 const { acquireLock, releaseLock } = require("./redis.service")
 const { order } = require('../models/order.model')
-const { checkout } = require("../routes")
 
 class CheckoutService {
     // login or without login

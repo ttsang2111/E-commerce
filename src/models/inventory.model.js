@@ -16,5 +16,4 @@ const inventoryShema = new Schema({
     timestamps: true
 })
 
-module.exports = {
-    inventory: model(DOCUMENT_NAME, inventoryShema)}
+module.exports = model(DOCUMENT_NAME, inventoryShema)

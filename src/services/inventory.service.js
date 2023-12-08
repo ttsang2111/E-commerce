@@ -1,7 +1,7 @@
 'use strict'
 
 const { BadRequestError } = require('../core/error.response')
-const { inventory } = require('../models/inventory.model')
+const inventory = require('../models/inventory.model')
 const { getProductById } = require('../models/repositories/product.repo')
 
 class InventoryService {

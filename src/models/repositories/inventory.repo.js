@@ -3,6 +3,7 @@
 const { convertStringToMongoDbObject } = require('../../utils')
 const inventory = require('../inventory.model')
 
+
 const insertInventory = async ({ stock, shopId, productId, location = 'unknown' }) => {
     return await inventory.create({
         inven_location: location,

@@ -1,6 +1,6 @@
 require('dotenv').config()
-const app = require('./src/app.js')
-const { port } = require('./src/configs/index.js')('app')
+const app = require('./api')
+const { port } = require('./api/configs/index.js')('app')
 
 
 app.listen(port, () => {
